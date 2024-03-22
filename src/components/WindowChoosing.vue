@@ -10,19 +10,19 @@
           </div>
           <h1 class="title">Быстрый <br> расчёт окна</h1>
           <div class="img-container">
-            <button class="img-button" @click="removeImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="18" cy="18" r="18" fill="#135EE4"/>
-              <path d="M9 18H27" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <button class="img-button" @click="removeImage"><svg width="22" height="4" viewBox="0 0 22 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 2H20" stroke="white" stroke-width="3" stroke-linecap="round"/>
             </svg>
+
             </button>
             <div v-for="(image, index) in images" :key="index">
               <img :src="image.src" alt="Image" />
             </div>
-            <button class="img-button" @click="addImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="18" cy="18" r="18" fill="#135EE4"/>
-              <path d="M9 18H27" stroke="white" stroke-width="3" stroke-linecap="round"/>
-              <path d="M18 27L18 9" stroke="white" stroke-width="3" stroke-linecap="round"/>
+            <button class="img-button" @click="addImage"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 11H20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+              <path d="M11 20L11 2" stroke="white" stroke-width="3" stroke-linecap="round"/>
             </svg>
+
             </button>
           </div>
           <div class="window-params-container">
@@ -96,9 +96,10 @@
             <Checkbox label="Даю свое согласие на получение рекламных сообщений" />
           </div>
           <div class="back-button">
-            <button @click="showContactManagerModal = false"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M10.7072 14.8635C10.8947 14.6759 11 14.4216 11 14.1565C11 13.8913 10.8947 13.637 10.7072 13.4495L5.75721 8.49946L10.7072 3.54946C10.8894 3.36086 10.9902 3.10826 10.9879 2.84606C10.9856 2.58387 10.8804 2.33305 10.695 2.14764C10.5096 1.96224 10.2588 1.85707 9.99661 1.85479C9.73442 1.85251 9.48182 1.95331 9.29321 2.13546L3.63621 7.79246C3.44874 7.97999 3.34343 8.2343 3.34343 8.49946C3.34343 8.76463 3.44874 9.01894 3.63621 9.20646L9.29321 14.8635C9.48074 15.0509 9.73505 15.1562 10.0002 15.1562C10.2654 15.1562 10.5197 15.0509 10.7072 14.8635Z" fill="#222222"/>
-            </svg> Вернуться к расчёту
+            </svg>
+            <button @click="showContactManagerModal = false"> Вернуться к расчёту
             </button>
           </div>
         </div>
@@ -222,7 +223,7 @@ watch(imageCount, () => {
 .close {
   display: flex;
   flex-direction: row;
-  margin-left: 346px;
+  margin-left: 338px;
   margin-top: 20px;
 }
 
@@ -245,10 +246,14 @@ watch(imageCount, () => {
 }
 
 .img-button {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
   width: 36px;
   height: 36px;
+  background-color: #134EE4;
   border-radius: 100%;
-  background-color: #135EE4;
   font-size: 1px;
 }
 
@@ -341,7 +346,7 @@ watch(imageCount, () => {
 }
 
 .input-container label {
-  font-weight: 700;
+  font-weight: 900;
   font-size: 14px;
   color: #222222;
   margin-left: 4px;
@@ -376,7 +381,8 @@ watch(imageCount, () => {
 }
 
 .checkboxes {
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
   width: 325px;
   height: 78px;
   margin-top: 20px;
@@ -400,13 +406,16 @@ watch(imageCount, () => {
 
 .back-button {
   display: flex;
-  align-items: flex-start;
-  margin-left: -22px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: -122px;
   margin-top: 26px;
 }
 
 .back-button button {
-  text-align: center;
+  line-height: 2;
+  text-align: justify;
   background-color: #fff;
   color: #222222;
   border: 0 solid #135EE4;

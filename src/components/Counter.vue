@@ -3,7 +3,7 @@
     <div class="title">
       {{ title }}
     </div>
-    <div class="number" :class="{ 'invalid': count < 500 || count > 1800 }">
+    <div class="number" :class="{ 'invalid': error }">
       <div class="minus" @click="decrement">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
@@ -17,40 +17,50 @@
         </svg>
       </div>
     </div>
-    <div v-if="count < 500 || count > 1800" class="warning-text">Value should be between 500mm and 1800mm</div>
+    <div v-if="error" class="warning-text">{{ errorText }}</div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-
 export default {
   props: {
     title: String,
-    updatePrice: Function,
-    totalPrice: Number
   },
   data() {
     return {
-      count: 1500
+      count: 1500,
+      error: false,
+      errorText: ''
     };
   },
   methods: {
     increment() {
       if (this.count < 1800) {
         this.count = Math.min(1800, this.count + 10);
-        this.updatePrice(this.count);
+        this.error = false;
+      } else {
+        this.error = true;
+        this.errorText = 'Максимальный размер';
       }
     },
     decrement() {
       if (this.count > 500) {
         this.count = Math.max(500, this.count - 10);
-        this.updatePrice(this.count);
+        this.error = false; // Reset error flag
+      } else {
+        this.error = true;
+        this.errorText = 'Минимальный размер';
       }
     },
     validateInput() {
+      if (this.count < 500 || this.count > 1800) {
+        this.error = true;
+        this.errorText = this.count < 500 ? 'Минимальный размер' : 'Максимальный размер';
+      } else {
+        this.error = false;
+        this.errorText = '';
+      }
       this.count = Math.min(1800, Math.max(500, Math.floor(Number(this.count) / 10) * 10));
-      this.updatePrice(this.count);
     }
   }
 };
@@ -64,6 +74,10 @@ export default {
   border-radius: 5px;
   display: flex;
   align-items: center;
+}
+
+.number.invalid {
+  border-color: red;
 }
 
 .minus,
@@ -86,8 +100,16 @@ input {
   width: 64px;
   text-align: center;
   font-size: 26px;
-  border: #fafafa;
+  border: none;
   border-radius: 4px;
   margin: 0 5px;
+}
+
+.warning-text {
+  margin-left: 14px;
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 </style>

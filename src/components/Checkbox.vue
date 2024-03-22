@@ -1,6 +1,8 @@
 <template>
   <div class="checkbox">
-    <input type="checkbox" v-model="isChecked" :id="id" />
+    <div class="checkbox-input">
+      <input type="checkbox" v-model="isChecked" :id="id" />
+    </div>
     <label :for="id">{{ label }}</label>
   </div>
 </template>
@@ -20,9 +22,11 @@ const id = 'checkbox-' + Math.random().toString(36).substring(7);
 .checkbox {
   display: flex;
   align-items: center;
+  border-radius: 4px;
 }
 
 .checkbox input[type="checkbox"] {
+  cursor: pointer;
   width: 18.19px;
   height: 18px;
   accent-color: #76BC21;
@@ -35,6 +39,7 @@ const id = 'checkbox-' + Math.random().toString(36).substring(7);
 }
 
 .checkbox label {
+  margin-top: 12px;
   color: #707C8B;
   text-align: left;
   font-size: 12px;
