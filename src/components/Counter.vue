@@ -22,9 +22,13 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
   props: {
-    title: String
+    title: String,
+    updatePrice: Function,
+    totalPrice: Number
   },
   data() {
     return {
@@ -33,17 +37,20 @@ export default {
   },
   methods: {
     increment() {
-      if (this.count < 1800) { // Update maximum value check
-        this.count = Math.min(1800, this.count + 10); // Update maximum value
+      if (this.count < 1800) {
+        this.count = Math.min(1800, this.count + 10);
+        this.updatePrice(this.count);
       }
     },
     decrement() {
       if (this.count > 500) {
         this.count = Math.max(500, this.count - 10);
+        this.updatePrice(this.count);
       }
     },
     validateInput() {
-      this.count = Math.min(1800, Math.max(500, Math.floor(Number(this.count) / 10) * 10)); // Update maximum value
+      this.count = Math.min(1800, Math.max(500, Math.floor(Number(this.count) / 10) * 10));
+      this.updatePrice(this.count);
     }
   }
 };
@@ -55,8 +62,8 @@ export default {
   height: 42px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  display: flex; /* Add display flex */
-  align-items: center; /* Center vertically */
+  display: flex;
+  align-items: center;
 }
 
 .minus,
@@ -66,7 +73,7 @@ export default {
   margin-top: 8px;
   border-radius: 4px;
   justify-content: center;
-  padding: 8px 5px; /* Adjust padding */
+  padding: 8px 5px;
   cursor: pointer;
 }
 
@@ -81,6 +88,6 @@ input {
   font-size: 26px;
   border: #fafafa;
   border-radius: 4px;
-  margin: 0 5px; /* Add margin for spacing */
+  margin: 0 5px;
 }
 </style>

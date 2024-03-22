@@ -1,9 +1,9 @@
 <script setup>
-import HelloWorld from './components/WindowChoosing.vue'
+import WindowChoosing from './components/WindowChoosing.vue'
 </script>
 
 <template>
-  <HelloWorld/>
+  <WindowChoosing />
 </template>
 
 <style scoped>

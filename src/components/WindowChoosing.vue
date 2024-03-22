@@ -3,7 +3,6 @@
     <div class="modal-container" v-if="!showContactManagerModal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
-        <!-- Original modal content -->
         <div class="container">
           <div class="close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -11,7 +10,7 @@
           </div>
           <h1 class="title">Быстрый <br> расчёт окна</h1>
           <div class="img-container">
-            <button class="img-button" @click="addImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="img-button" @click="removeImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="18" cy="18" r="18" fill="#135EE4"/>
               <path d="M9 18H27" stroke="white" stroke-width="3" stroke-linecap="round"/>
             </svg>
@@ -19,7 +18,7 @@
             <div v-for="(image, index) in images" :key="index">
               <img :src="image.src" alt="Image" />
             </div>
-            <button class="img-button" @click="removeImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="img-button" @click="addImage"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="18" cy="18" r="18" fill="#135EE4"/>
               <path d="M9 18H27" stroke="white" stroke-width="3" stroke-linecap="round"/>
               <path d="M18 27L18 9" stroke="white" stroke-width="3" stroke-linecap="round"/>
@@ -27,8 +26,8 @@
             </button>
           </div>
           <div class="window-params-container">
-            <Counter title="Ширина створки, мм"/>
-            <Counter title="Высота створки, мм"/>
+            <Counter title="Ширина створки, мм" :updatePrice="updatePrice" />
+            <Counter title="Высота створки, мм" :updatePrice="updatePrice" />
           </div>
           <div class="window-option-container">
             <DescriptionSwitcher />
@@ -60,7 +59,7 @@
             <br>
           </div>
           <div class="warning-description">
-            Стоимость не включает доставку, монтаж,подоконник, ручку и другие детали <br><br> Для получения точно расчета:
+            Стоимость не включает доставку, монтаж,подоконник, ручку и другие детали <br> Для получения точно расчета:
           </div>
           <br>
           <div class="submit-button">
@@ -70,34 +69,31 @@
       </div>
     </div>
 
-    <!-- Contact manager modal -->
     <div class="modal-container" v-if="showContactManagerModal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
+        <div class="close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        </div>
         <h1 class="title">Свяжитесь <br> с менеджером</h1>
         <div class="contact-form">
           <div class="input-container">
             <label for="name">Имя</label>
             <input type="text" id="name" placeholder="Ваше имя" />
           </div>
+          <br>
           <div class="input-container">
             <label for="phone">Телефон</label>
             <input type="text" id="phone" placeholder="Номер телефона" />
           </div>
           <br>
           <div class="submit-button">
-            <button>Отправить</button>
+            <button @click="submitForm">Отправить</button>
           </div>
           <div class="checkboxes">
-            <div class="check1">
-              <input type="checkbox" id="ads" />
-              <label for="ads">Отправляя контактные данные, вы даёте согласие на обработку ваших персональных данных</label>
-            </div>
-            <br />
-            <div class="check2">
-              <input type="checkbox" id="email" />
-              <label for="email">Даю свое согласие на получение рекламных сообщений</label>
-            </div>
+            <Checkbox label="Отправляя контактные данные, выдаёте согласие наобработку ваших персональных данных" />
+            <Checkbox label="Даю свое согласие на получение рекламных сообщений" />
           </div>
           <div class="back-button">
             <button @click="showContactManagerModal = false"><svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -108,48 +104,63 @@
         </div>
       </div>
     </div>
-    <div class="modal-container" v-if="showThankYouModal">
-      <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <h1 class="title">Thank You!</h1>
-        <p>Your message has been sent successfully.</p>
-        <div class="submit-button">
-          <button @click="showThankYouModal = false">Close</button>
-        </div>
+  </div>
+  <div class="modal-container" v-if="showThankYouModal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      </div>
+      <h1 class="title">Спасибо!</h1>
+      <div>Мы свяжемся с Вами в ближайшее время</div>
+      <br>
+      <br>
+      <div class="submit-button">
+        <button @click="showThankYouModal = false; showContactManagerModal = false">Вернуться к расчёту</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import {ref, computed, watch, defineAsyncComponent} from 'vue';
 import Counter from "./Counter.vue";
 import DescriptionSwitcher from "./DescriptionSwitcher.vue";
+import Checkbox from "./Checkbox.vue";
 
 const showContactManagerModal = ref(false);
 
-const imageCount = ref(1); // Initialize with one image
+const imageCount = ref(1);
 const heightCount = ref(0);
 const widthCount = ref(0);
-const basePrice = 10000; // Base price for each image
-const pricePerImage = 2; // Additional price per image after the limit
+const basePrice = 10000;
+const additionalPricePerUnit = 10;
+const pricePerImage = 2;
 const showThankYouModal = ref(false);
 
 
 const getImageUrl = (count) => {
   switch (count) {
     case 1:
-      return "https://litrausa.com/wp-content/uploads/2014/11/icon-Retractable-Enclosures.jpg";
+      return "src/assets/window3.png";
     case 2:
-      return "https://litrausa.com/wp-content/uploads/2014/11/icon-skylights-sunrooms.jpg";
+      return "src/assets/window1.png";
     case 3:
-      return "https://litrausa.com/wp-content/uploads/2014/11/pool-enclosures-litra-2021-cover.jpg";
+      return "src/assets/window2.png";
+    case 4:
+      return "src/assets/window3.png";
     default:
       return "";
   }
 };
 
-const images = ref([{ src: getImageUrl(1), height: heightCount.value, width: widthCount.value }]); // Initialize with one image
+const submitForm = () => {
+  showContactManagerModal.value = false
+  showThankYouModal.value = true;
+};
+
+const images = ref([{ src: getImageUrl(1), height: heightCount.value, width: widthCount.value }]);
 
 const addImage = () => {
   if (imageCount.value < 4) {
@@ -176,9 +187,32 @@ const removeImage = () => {
 };
 
 const totalPrice = computed(() => {
-  const additionalPrice = Math.max(0, imageCount.value - 4) * pricePerImage;
+  let additionalPrice = Math.max(0, imageCount.value - 4) * pricePerImage;
+  switch (imageCount.value) {
+    case 1:
+      additionalPrice += 0;
+      break;
+    case 2:
+      additionalPrice += 1000;
+      break;
+    case 3:
+      additionalPrice += 1500;
+      break;
+    case 4:
+      additionalPrice += 2000;
+      break;
+    default:
+      break;
+  }
   return basePrice + additionalPrice;
 });
+
+const updatePrice = () => {
+  const additionalPrice = (heightCount.value + widthCount.value) * additionalPricePerUnit;
+
+  totalPrice.value = basePrice + (imageCount.value - 1) * pricePerImage + additionalPrice;
+};
+
 watch(imageCount, () => {
   totalPrice.value;
 });
@@ -263,7 +297,7 @@ watch(imageCount, () => {
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
+  align-items: center;
 }
 
 .window-params-container {
@@ -310,14 +344,13 @@ watch(imageCount, () => {
   font-weight: 700;
   font-size: 14px;
   color: #222222;
-  padding-right: 10px;
-  font-size: 14px;
+  margin-left: 4px;
 }
 
 .input-container input {
   width: 325px;
   height: 50px;
-  padding: 10px;
+  padding: 14px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -343,36 +376,45 @@ watch(imageCount, () => {
 }
 
 .checkboxes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   width: 325px;
   height: 78px;
   margin-top: 20px;
 }
 
-.checkboxes input[type="checkbox"] {
+.checkboxes input[type="checkbox"],
+.check1 input[type="checkbox"],
+.check2 input[type="checkbox"] {
+  width: 18.19px;
+  height: 18px;
+  accent-color: #76BC21;
+  color: #fafafa;
   margin-right: 10px;
 }
 
+.checkboxes input[type="checkbox"]::before,
+.check1 input[type="checkbox"]::before,
+.check2 input[type="checkbox"]::before {
+  color: #fafafa;
+}
+
 .back-button {
-  margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+  margin-left: -22px;
+  margin-top: 26px;
 }
 
 .back-button button {
+  text-align: center;
   background-color: #fff;
-  color: #135EE4;
-  border: 1px solid #135EE4;
+  color: #222222;
+  border: 0 solid #135EE4;
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.back-button button:hover {
-  background-color: #135EE4;
-  color: #fff;
 }
 
 .input-container {
@@ -391,23 +433,19 @@ watch(imageCount, () => {
 
 .check1,
 .check2 label {
-  width: 300px;
+  color: #707C8B;
   text-align: left;
   font-size: 12px;
 }
 
-.check1,
+.check1 input {
+  width: 12.12px;
+  height: 12.12px;
+}
+
 .check2 input {
   width: 12.12px;
   height: 12.12px;
 }
 
-.input-container input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
 </style>

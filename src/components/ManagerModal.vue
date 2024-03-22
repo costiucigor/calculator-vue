@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Main modal -->
     <div class="modal-container" v-if="!showContactManagerModal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
@@ -8,8 +7,6 @@
         <button class="submit-button" @click="showContactManagerModal = true">Свяжитесь с менеджером</button>
       </div>
     </div>
-
-    <!-- Contact manager modal -->
   </div>
 </template>
 
@@ -58,11 +55,4 @@ const showContactManagerModal = ref(false);
   align-items: center;
 }
 
-.contact-form {
-  /* Styles for contact form inputs */
-}
-
-.submit-button {
-  /* Styles for submit button */
-}
 </style>
