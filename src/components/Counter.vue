@@ -1,3 +1,44 @@
+<script setup>
+import {ref} from 'vue';
+
+defineProps({title: String})
+
+const count = ref(1500);
+const error = ref(false);
+const errorText = ref('');
+
+const increment = () => {
+  if (count.value < 1800) {
+    count.value = Math.min(1800, count.value + 10);
+    error.value = false;
+  } else {
+    error.value = true;
+    errorText.value = 'Максимальный размер';
+  }
+};
+
+const decrement = () => {
+  if (count.value > 500) {
+    count.value = Math.max(500, count.value - 10);
+    error.value = false;
+  } else {
+    error.value = true;
+    errorText.value = 'Минимальный размер';
+  }
+};
+
+const validateInput = () => {
+  if (count.value < 500 || count.value > 1800) {
+    error.value = true;
+    errorText.value = count.value < 500 ? 'Минимальный размер' : 'Максимальный размер';
+  } else {
+    error.value = false;
+    errorText.value = '';
+  }
+  count.value = Math.min(1800, Math.max(500, Math.floor(Number(count.value) / 10) * 10));
+};
+</script>
+
 <template>
   <div class="container-counter">
     <div class="title">
@@ -9,7 +50,7 @@
           <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
-      <input type="text" v-model="count" @input="validateInput" />
+      <input ref="input" type="text" v-model="count" @input="validateInput"/>
       <div class="plus" @click="increment">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
@@ -21,52 +62,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    title: String,
-  },
-  data() {
-    return {
-      count: 1500,
-      error: false,
-      errorText: ''
-    };
-  },
-  methods: {
-    increment() {
-      if (this.count < 1800) {
-        this.count = Math.min(1800, this.count + 10);
-        this.error = false;
-      } else {
-        this.error = true;
-        this.errorText = 'Максимальный размер';
-      }
-    },
-    decrement() {
-      if (this.count > 500) {
-        this.count = Math.max(500, this.count - 10);
-        this.error = false; // Reset error flag
-      } else {
-        this.error = true;
-        this.errorText = 'Минимальный размер';
-      }
-    },
-    validateInput() {
-      if (this.count < 500 || this.count > 1800) {
-        this.error = true;
-        this.errorText = this.count < 500 ? 'Минимальный размер' : 'Максимальный размер';
-      } else {
-        this.error = false;
-        this.errorText = '';
-      }
-      this.count = Math.min(1800, Math.max(500, Math.floor(Number(this.count) / 10) * 10));
-    }
-  }
-};
-</script>
-
-<style>
+<style scoped>
 .number {
   width: 150px;
   height: 42px;
@@ -99,7 +95,8 @@ input {
   height: 38px;
   width: 64px;
   text-align: center;
-  font-size: 26px;
+  font-size: 22px;
+  font-weight: bold;
   border: none;
   border-radius: 4px;
   margin: 0 5px;
@@ -110,6 +107,11 @@ input {
   position: absolute;
   color: red;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 1px;
+}
+
+.title {
+  margin-bottom: 4px;
+  font-size: 14px;
 }
 </style>

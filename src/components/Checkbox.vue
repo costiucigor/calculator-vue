@@ -1,3 +1,14 @@
+<script setup>
+import { ref } from 'vue';
+
+defineProps({
+  label: String
+});
+
+const isChecked = ref(false);
+const id = 'checkbox-' + Math.random().toString(36).substring(7);
+</script>
+
 <template>
   <div class="checkbox">
     <div class="checkbox-input">
@@ -7,35 +18,18 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-
-defineProps({
-  label: String
-})
-
-const isChecked = ref(false);
-const id = 'checkbox-' + Math.random().toString(36).substring(7);
-</script>
-
 <style scoped>
 .checkbox {
   display: flex;
   align-items: center;
-  border-radius: 4px;
 }
 
-.checkbox input[type="checkbox"] {
+.checkbox-input input {
+  accent-color: #76bc21;
   cursor: pointer;
-  width: 18.19px;
-  height: 18px;
-  accent-color: #76BC21;
-  color: #fafafa;
-  margin-right: 10px;
-}
-
-.checkbox input[type="checkbox"]::before {
-  color: #fafafa;
+  width: 19px;
+  height: 19px;
+  background-color: #76BC21;
 }
 
 .checkbox label {

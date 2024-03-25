@@ -1,12 +1,11 @@
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
-  src: url('src/assets/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
   /* Add more src lines for different font weights/styles if needed */
 }
 
 :root {
-  /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
   line-height: 1.5;
   font-weight: 400;
 
