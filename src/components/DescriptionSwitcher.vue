@@ -1,12 +1,16 @@
 <script setup>
 import {computed, ref} from 'vue';
 
-const names = ref(['Комфорт Люмо', 'Комфорт Люмо2', 'Комфорт Люмо3']);
-const descriptions = ref(['Улучшенные характеристики для более комфортного проживания', 'Улучшенные характеристики для более комфортного проживания2', 'Улучшенные характеристики для более комфортного проживания3']);
+const names = ref(['Стандарт Эконо', 'Стандарт Ларго', 'Комфорт Евро', 'Комфорт Люмо', 'Комфорт Браво', 'Премиум Примо']);
+const descriptions = ref(['Базовый стандарт как для жилых, так и нежилых помещений, балконов, лоджий.', 'Базовый стандарт с улучшенной теплоизоляцией.', 'Стандарт комфортной и удобной жизни.', "Комфортабельные окна, идеальные для жилых помещений с недостаточным освещением.", "Комфортабельные и крепкие окна, идеальное решение для больших оконных проёмов.", "Бескомпромиссное решение для тех, кто привык к лучшему."]);
+const second_description = ref(['Качественное остекление за минимальные средства.', 'Универсальное решение как для жилых, так или нежилых помещений, балконов, лоджий.', 'Отличный вариант для жилых помещений с хорошим отоплением.', 'У этой системы самая узкая рама, за счет чего оконный проём зрительно кажется больше.', 'Надёжные, тёплые и тихие.', 'Многокамерная система с превосходными характеристиками гарантирует тишину и спокойствие в вашем доме.'])
+const current_url = ref(['https://new.okonti.ru/p/system/econo/', 'https://new.okonti.ru/p/system/largo/', 'https://new.okonti.ru/p/system/euro/', 'https://new.okonti.ru/p/system/lumo/', 'https://new.okonti.ru/p/system/bravo/', 'https://new.okonti.ru/p/system/primo/'])
 const currentIndex = ref(0);
 
 const currentName = computed(() => names.value[currentIndex.value]);
 const currentDescription = computed(() => descriptions.value[currentIndex.value]);
+const currentDescriptionSecond = computed(() => second_description.value[currentIndex.value]);
+const currentUrl = computed(() => current_url.value[currentIndex.value]);
 
 const switchName = (direction) => {
   currentIndex.value = (currentIndex.value + direction + names.value.length) % names.value.length;
@@ -29,13 +33,14 @@ const switchName = (direction) => {
       </svg>
     </div>
   </div>
-  <br>
-  <div class="description">{{ currentDescription }}</div>
-  <div class="description-2">
-    Увеличеная жесткость конструкции
-  </div>
-  <div class="read-more">
-    Подробности
+  <div class="content">
+    <div class="description">{{ currentDescription }}</div>
+    <div class="description-2">
+      {{ currentDescriptionSecond }}
+    </div>
+    <div class="read-more-container">
+      <a class="read-more" :href="currentUrl" target="_blank">Подробности</a>
+    </div>
   </div>
 </template>
 
@@ -48,7 +53,21 @@ const switchName = (direction) => {
   height: 44px;
 }
 
+.content {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 325px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.read-more-container {
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+
 .read-more {
+  cursor: pointer;
   color: #135EE4;
 }
 
@@ -70,9 +89,10 @@ const switchName = (direction) => {
 }
 
 .name {
+  cursor: default;
   font-weight: bold;
   font-size: 22px;
-  font-family: Arial;
+  font-family: "Roboto Bold";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,8 +101,13 @@ const switchName = (direction) => {
   height: 44px;
 }
 
+.description,
 .description-2 {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.8px;
+  text-align: center;
   margin-top: 6px;
-  font-size: 16px;
 }
 </style>

@@ -1,8 +1,22 @@
 @font-face {
   font-family: 'Roboto';
-  font-style: normal;
   src: url('/fonts/Roboto-Regular.ttf') format('truetype');
   /* Add more src lines for different font weights/styles if needed */
+}
+
+@font-face {
+  font-family: 'ALSRubl';
+  src: url('/fonts/rouble.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Bold';
+  src: url("/fonts/Roboto-Bold.ttf") format("truetype");
 }
 
 :root {
@@ -42,12 +56,12 @@ h1 {
 }
 
 button {
+  font-family: "Roboto Bold";
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
+  font-weight: 700;
   cursor: pointer;
   transition: border-color 0.25s;
 }
