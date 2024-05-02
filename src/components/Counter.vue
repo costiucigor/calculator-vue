@@ -9,7 +9,7 @@
           <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
-      <input ref="input" type="text" v-model="count" @input="handleInput" @blur="validateInput"/>
+      <input ref="input" type="text" v-model="count" @input="handleInput" @blur="validateInput" :style="{ maxWidth: maxWindowWidth + 'px' }"/>
       <div class="plus" @click="increment">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
@@ -22,64 +22,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref, computed, onMounted, watch} from 'vue';
 
 // Define props
 const props = defineProps({
   title: String,
   maxCount: {
     type: Number,
-  }
+  },
 });
 
 // Destructure props
 const { title, maxCount } = props;
 
+onMounted(() => {
+  console.log('Initial maxCount:', props.maxCount);
+
+  // Watch for updates to props.maxCount
+  watch(() => props.maxCount, (newValue, oldValue) => {
+    console.log('maxCount updated:', newValue);
+    // You can perform any necessary actions here when maxCount changes
+  });
+});
+
 // Define reactive variables
-const count = ref(maxCount.toString());
+let count = ref(props.maxCount);
 const error = ref(false);
 const errorText = ref('');
 const maxError = ref(false);
 
 // Define functions
-const increment = () => {
-  const currentValue = parseInt(count.value);
-  const incrementedValue = Math.min(parseInt(count.value) + 10, maxCount); // Increment value, but not exceeding maxCount
-  if (currentValue === maxCount) {
-    // If the current value is already equal to maxCount, show the error message
-    error.value = true;
-    errorText.value = 'Максимальный размер';
-    hideErrorMessage();
-  } else {
-    // Otherwise, update the count value
-    count.value = incrementedValue.toString();
-  }
-};
-
-const decrement = () => {
-  maxError.value = false; // Reset maxError flag
-
-  if (parseInt(count.value) > 50) {
-    count.value = Math.max(50, parseInt(count.value) - 10).toString();
-  } else {
-    error.value = true;
-    errorText.value = 'Минимальный размер';
-    hideErrorMessage();
-  }
-};
 
 const validateInput = () => {
-  const inputNumber = parseInt(count.value);
-  if (isNaN(inputNumber) || !Number.isInteger(inputNumber)) {
-    error.value = true;
-    errorText.value = 'Введите целое числовое значение';
-  } else if (inputNumber < 50) {
+  let inputNumber = count.value;
+  if (inputNumber < 50) {
     count.value = '50'; // Adjust input to minimum value
     error.value = true;
     errorText.value = 'Минимальный размер';
     hideErrorMessage();
-  } else if (inputNumber > parseInt(maxCount)) { // Adjusted condition
-    count.value = maxCount.toString(); // Adjust input to maximum value
+  } else if (inputNumber > props.maxCount) { // Adjusted condition
+    count.value = props.maxCount; // Adjust input to maximum value
     error.value = true;
     errorText.value = 'Максимальный размер';
     hideErrorMessage();
@@ -103,8 +85,46 @@ const handleInput = () => {
   count.value = count.value.replace(/\D/g, '');
 };
 
+const increment = () => {
+  const currentValue = parseInt(count.value);
+  const incrementedValue = Math.min(currentValue + 10, props.maxCount); // Increment while respecting maxCount
+  count.value = incrementedValue;
+
+  if (currentValue === 50) {
+    error.value = false;
+  }
+
+  if (incrementedValue === props.maxCount) {
+    error.value = true;
+    errorText.value = 'Максимальный размер';
+    hideErrorMessage();
+  } else {
+    validateInput();
+  }
+};
+
+
+const decrement = () => {
+  maxError.value = false;
+  if (count.value > 50) {
+    count.value = Math.max(50, count.value - 10)
+    validateInput(); // Validate input after decrementing count
+  } else {
+    error.value = true;
+    errorText.value = 'Минимальный размер';
+    hideErrorMessage();
+  }
+};
+
+// Calculate max window width based on quantity of sashes
+watch(() => props.maxCount, (newValue, oldValue) => {
+  console.log('maxCount updated:', newValue);
+  count.value = newValue; // Update count when maxCount changes
+});
+
+// Calculate max window width based on quantity of sashes
+
 // Validate input on initial load
-validateInput();
 </script>
 
 <style scoped>
@@ -119,12 +139,6 @@ validateInput();
 
 .number.invalid {
   border-color: red;
-}
-
-@media only screen and (max-width: 480px) {
-  input[type="text"] {
-    height: 30px; /* Adjust the height as needed */
-  }
 }
 
 .minus,
@@ -144,7 +158,6 @@ validateInput();
 }
 
 input {
-  height: 38px;
   width: 64px;
   text-align: center;
   font-size: 22px;

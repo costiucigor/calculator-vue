@@ -12,6 +12,13 @@ const props = defineProps({
   showThankYouModal: Boolean
 });
 
+const showIcons = ref(true);
+
+const isFingerIconActive = computed(() => {
+  return showIcons.value;
+});
+
+
 const showModalRef = ref(props.showModal);
 const showContactManagerModalRef = ref(props.showContactManagerModal);
 const showGetCalculationModalRef = ref(props.showGetCalculationModal);
@@ -43,9 +50,10 @@ const imageCount = ref(1);
 const currentImageState = ref(1);
 const heightCount = ref(0);
 const widthCount = ref(0);
-const basePrice = 10000;
+const basePrice = store.getters.getPrice;
 const additionalPricePerUnit = 10;
 const pricePerImage = 2;
+const windowType = ref('');
 
 const name = ref('')
 const phone = ref('');
@@ -56,39 +64,23 @@ const isPhoneFilled = computed(() => {
   return phone.value.trim() !== '';
 });
 
-const changeImage = (index) => {
-  console.log('Changing image to index:', index);
-  const currentImageUrl = images.value[index].src;
-  let newImageUrl = "";
-  switch (currentImageUrl) {
-    case getImageUrl(1):
-      newImageUrl = getImageUrl(2);
-      break;
-    case getImageUrl(2):
-      newImageUrl = getImageUrl(3);
-      break;
-    case getImageUrl(3):
-      newImageUrl = getImageUrl(1);
-      break;
-    case getImageUrl(4):
-    default:
-      newImageUrl = getImageUrl(1);
-      break;
-  }
-  images.value[index].src = newImageUrl;
-};
-
 
 const getImageUrl = (count) => {
   switch (count) {
     case 1:
       return "/images/window1.svg";
     case 2:
-      return "/images/window3.svg";
-    case 3:
       return "/images/window2.svg";
-    case 4:
+    case 3:
       return "/images/window3.svg";
+    case 4:
+      return "/images/window4.svg";
+    case 5:
+      return "/images/windows5.svg";
+    case 6:
+      return "/images/window6.svg";
+    case 7:
+      return "/images/window7.svg";
     default:
       return "";
   }
@@ -102,6 +94,7 @@ const addImage = () => {
   if (imageCount.value < 4) {
     imageCount.value++;
     images.value.push({src: getImageUrl(1), height: heightCount.value, width: widthCount.value});
+    store.commit('updateQuantity', imageCount.value);
   }
 };
 
@@ -119,6 +112,7 @@ const removeImage = () => {
   if (imageCount.value > 1) {
     imageCount.value--;
     images.value.pop();
+    store.commit('updateQuantity', imageCount.value);
   }
 };
 
@@ -143,6 +137,112 @@ const totalPrice = computed(() => {
   return basePrice + additionalPrice;
 });
 
+const quantity = computed(() => store.getters.getQuantity);
+
+const windowTypes = ref(Array(images.value.length).fill(''));
+
+let currentOpenIndex = null;
+
+const hideHints = () => {
+  for (let i = 0; i < images.value.length; i++) {
+    if (i !== currentOpenIndex) {
+      windowTypes.value[i] = '';
+    }
+  }
+};
+
+
+const changeImage = (index) => {
+  console.log('Changing image to index:', index);
+  const currentImageUrl = images.value[index].src;
+  let newImageUrl = "";
+  let newWindowType = "";
+
+  switch (currentImageUrl) {
+    case getImageUrl(1):
+      newImageUrl = getImageUrl(2);
+      newWindowType = 'Поворотно-откидная';
+      break;
+    case getImageUrl(2):
+      newImageUrl = getImageUrl(3);
+      newWindowType = 'Поворотная';
+      break;
+    case getImageUrl(3):
+      newImageUrl = getImageUrl(4);
+      newWindowType = 'Поворотная';
+      break;
+    case getImageUrl(4):
+      newImageUrl = getImageUrl(5);
+      newWindowType = 'Поворотно-откидная';
+      break;
+    case getImageUrl(5):
+      newImageUrl = getImageUrl(6);
+      newWindowType = 'Откидная';
+      break;
+    case getImageUrl(6):
+      newImageUrl = getImageUrl(7);
+      newWindowType = 'Откидная';
+      break;
+    case getImageUrl(7):
+      newImageUrl = getImageUrl(1);
+      newWindowType = 'Глухая';
+      break;
+    default:
+      newImageUrl = getImageUrl(1);
+      newWindowType = '';
+      break;
+  }
+
+  // Update the image URL and window type for the selected index
+  images.value[index].src = newImageUrl;
+  windowTypes.value[index] = newWindowType;
+
+  currentOpenIndex = index;
+
+  console.log(windowTypes.value[index]);
+
+  hideHints();
+
+  setTimeout(() => {
+    // Clear the window type after 3 seconds
+    windowTypes.value[index] = '';
+  }, 10000);
+  showIcons.value = false;
+};
+
+let count = store.getters.getQuantity
+
+let maxCount = ref(150);
+
+watch(() => imageCount, (newValue, oldValue) => {
+  maxCount.value = newValue * 150;
+  console.log('New value of count:', newValue, maxCount.value); // Log the new value of count
+});
+
+const closeModal = () => {
+  props.showContactManagerModal = false;
+  store.state.showModal = false;
+  props.showGetCalculationModal = false;
+  props.showThankYouModal = false
+}
+
+window.addEventListener('click', (event) => {
+  const modal = document.querySelector('.modal-overlay');
+
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+// Adăugați un eveniment keydown pentru închiderea modalului atunci când se apasă tasta Escape
+window.addEventListener('keydown', (event) => {
+  const modal = document.getElementById('modal'); // Schimbați 'modal' cu ID-ul real al modalului
+
+  if (event.key === 'Escape') {
+    closeModal();
+  }
+});
+
 watch(imageCount, () => {
   totalPrice.value;
 });
@@ -155,13 +255,13 @@ watch(imageCount, () => {
       <div class="modal-content">
         <div class="container">
           <div class="close"
-               @click="showContactManagerModal = false; store.state.showModal = false; showGetCalculationModal = false; showThankYouModal = false">
+               @click="closeModal">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round"/>
             </svg>
           </div>
-          <h1 class="title">Быстрый <br> расчёт окна</h1>
+          <h1 class="title">Быстрый расчёт окна</h1>
           <div class="img-container">
             <button class="img-button" @click="removeImage">
               <svg width="22" height="4" viewBox="0 0 22 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,14 +270,15 @@ watch(imageCount, () => {
 
             </button>
             <div class="images">
-              <div v-for="(image, index) in images" :key="index">
-                <img :src="image.src" @click="changeImage(index)" alt="Image"/>
-                <div class="param" v-if="image.src === getImageUrl(2) || image.src === getImageUrl(3)">Поворотно <br>
-                  откидная
+              <div v-for="(image, index) in images" :key="index" :class="{ 'first-index': index === 0 }">
+                <img @click="changeImage(index)" v-if="index === 0 && showIcons" src="/images/finger.svg" class="finger-icon" alt="Finger Icon">
+                <img :src="image.src" @click="changeImage(index)" class="window-img" alt="Image"/>
+                <div class="param">
+                  {{ windowTypes[index] }}
                 </div>
               </div>
             </div>
-            <button class="img-button" @click="addImage">
+            <button class="img-button plus" @click="addImage">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 11H20" stroke="white" stroke-width="3" stroke-linecap="round"/>
                 <path d="M11 20L11 2" stroke="white" stroke-width="3" stroke-linecap="round"/>
@@ -186,28 +287,25 @@ watch(imageCount, () => {
             </button>
           </div>
           <div class="window-params-container">
-            <Counter title="Ширина створки, см" :maxCount="150"/>
-            <Counter title="Высота створки, см" :maxCount="180"/>
+            <Counter title="Ширина окна, см" :maxCount="imageCount * 150"/>
+            <Counter title="Высота окна, см" :maxCount="180"/>
           </div>
           <div class="window-option-container">
             <DescriptionSwitcher/>
           </div>
           <div class="price-container">
             <div class="price-total">{{ formattedTotalPrice }} <span style="font-family: Roboto Bold,serif;">₽</span></div>
-            <div class="get-sms" @click="showGetCalculationModal = true; showModal = false">
-              Получить расчёт по СМС <span class="icon"><img src="/images/sms.svg" alt=""></span>
-            </div>
             <br>
           </div>
           <div class="warning-description">
-            Стоимость не включает доставку, монтаж,<br> подоконник, ручку и другие детали
-          </div>
-          <div class="warning-description-2">
-            Для получения точно расчета:
+            Стоимость выбранного окна без учёта скидок,<br> монтажа, откосов, отлива, подоконника и ручек
           </div>
           <br>
           <div class="submit-button showModalButton">
-            <button @click="showContactManagerModal = true; showModal = false;">Свяжитесь с менеджером</button>
+            <button @click="showContactManagerModal = true; showModal = false;">Записаться на бесплатный замер</button>
+          </div>
+          <div class="get-sms" @click="showGetCalculationModal = true; showModal = false">
+            Получить ссылку на расчёт в СМС
           </div>
         </div>
       </div>
@@ -216,26 +314,37 @@ watch(imageCount, () => {
     <div class="modal-container" v-if="showGetCalculationModal">
       <div class="modal-overlay"></div>
       <div class="modal-content">
-        <div class="close"
-             @click="showContactManagerModal = false; store.state.showModal = false; showModal = false; showGetCalculationModal = false; showThankYouModal = false">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-          </svg>
+        <h1 class="title-link">Получить ссылку</h1>
+        <div class="description-phone">
+          Мы пришлём вам ссылку на этот расчёт по СМС
         </div>
-        <h1 class="title">Расчёт по СМС</h1>
         <div class="contact-form">
           <div class="input-container">
             <label for="phone">Номер телефона</label>
-            <input id="phone" v-model="phone" v-maska data-maska="+# (###) ###-##-##" placeholder="Номер телефона"
+            <input id="phone" v-model="phone" v-maska data-maska="+7 (###) ###-##-##" placeholder="Номер телефона"
                    class="masked-input" oninput="this.value = this.value.replace(/[^0-9+() -]/g, '')"/>
           </div>
           <div class="submit-button">
-            <button :disabled="!isPhoneFilled" @click="sendCalculationSMS">Отправить</button>
+            <button :disabled="!isPhoneFilled || !checked1" @click="sendCalculationSMS">Отправить</button>
           </div>
           <div class="back-button">
-            <img src="/images/arrow.svg" alt="">
             <button @click="showGetCalculationModal = false; showModal = true"> Вернуться к расчёту</button>
+          </div>
+          <div class="checkboxes">
+            <div class="agreement">
+              <input type="checkbox" v-model="checked1" class="custom-checkbox" id="agreement_checkbox" name="agreement_checkbox" required="" checked="">
+              <label for="agreement_checkbox">
+                <div>Отправляя контактные данные, вы даёте <a href="https://new.okonti.ru/company/privacy-policy/" target="_blank">согласие на&nbsp;обработку ваших
+                  персональных данных</a></div>
+              </label>
+            </div>
+            <div class="agreement mt-1">
+              <input type="checkbox" v-model="checked2" class="custom-checkbox" id="agreement_subscribe" name="agreement_subscribe" checked="">
+              <label for="agreement_subscribe">
+                <div>Даю свое <a href="https://new.okonti.ru/company/privacy-policy/" target="_blank">согласие на получение рекламных
+                  сообщений</a></div>
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -243,15 +352,8 @@ watch(imageCount, () => {
 
     <div class="modal-container" v-if="showContactManagerModal">
       <div class="modal-overlay"></div>
-      <div class="modal-content">
-        <div class="close"
-             @click="store.state.showModal = false; showContactManagerModal = false; showModal = false; showGetCalculationModal = false; showThankYouModal = false">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1 class="title">Свяжитесь <br> с менеджером</h1>
+      <div class="modal-content" style="overflow-y: hidden">
+        <h1 class="title">Записаться на бесплатный замер</h1>
         <div class="contact-form">
           <div class="inputs">
             <div class="input-container">
@@ -261,13 +363,17 @@ watch(imageCount, () => {
             </div>
             <div class="input-container">
               <label for="phone">Телефон</label>
-              <input id="phone" v-model="phone" v-maska data-maska="+# (###) ###-##-##" placeholder="Номер телефона"
+              <input id="phone" v-model="phone" v-maska data-maska="+7 (###) ###-##-##" placeholder="Номер телефона"
                      class="masked-input" oninput="this.value = this.value.replace(/[^0-9+() -]/g, '')"/>
             </div>
           </div>
           <div class="submit-button">
             <button :disabled="name === '' || phone === '' || !checked1"
                     @click="showContactManagerModal = false; showThankYouModal = true">Отправить
+            </button>
+          </div>
+          <div class="back-button">
+            <button @click="showContactManagerModal = false; showModal = true"> Вернуться к расчёту
             </button>
           </div>
           <div class="checkboxes">
@@ -286,15 +392,6 @@ watch(imageCount, () => {
               </label>
             </div>
           </div>
-          <div class="back-button">
-            <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M10.7072 14.8635C10.8947 14.6759 11 14.4216 11 14.1565C11 13.8913 10.8947 13.637 10.7072 13.4495L5.75721 8.49946L10.7072 3.54946C10.8894 3.36086 10.9902 3.10826 10.9879 2.84606C10.9856 2.58387 10.8804 2.33305 10.695 2.14764C10.5096 1.96224 10.2588 1.85707 9.99661 1.85479C9.73442 1.85251 9.48182 1.95331 9.29321 2.13546L3.63621 7.79246C3.44874 7.97999 3.34343 8.2343 3.34343 8.49946C3.34343 8.76463 3.44874 9.01894 3.63621 9.20646L9.29321 14.8635C9.48074 15.0509 9.73505 15.1562 10.0002 15.1562C10.2654 15.1562 10.5197 15.0509 10.7072 14.8635Z"
-                  fill="#222222"/>
-            </svg>
-            <button @click="showContactManagerModal = false; showModal = true"> Вернуться к расчёту
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -302,13 +399,6 @@ watch(imageCount, () => {
   <div class="modal-container" v-if="showThankYouModal">
     <div class="modal-overlay"></div>
     <div class="modal-content">
-      <div class="close"
-           @click="store.state.showModal = false; showContactManagerModal = false; showModal = false; showGetCalculationModal = false; showThankYouModal = false">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round"/>
-        </svg>
-      </div>
       <h1 class="title">Спасибо!</h1>
       <div class="message">Мы свяжемся с Вами в ближайшее время</div>
       <br>
@@ -360,37 +450,33 @@ watch(imageCount, () => {
 
 .submit-button,
 .showModalButton {
-  margin-bottom: 20px;
-}
-
-.close {
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  margin-left: 338px;
-  margin-top: 20px;
-  transition: opacity 0.3s ease;
-}
-
-.close:hover {
-  opacity: 0.5;
+  margin-bottom: 10px;
 }
 
 .param {
   text-align: center;
   width: 62px; /* Changed from 62,36px */
   font-family: Roboto;
-  font-size: 11px;
+  font-size: 10px;
   position: absolute;
   color: #0e4fae;
 }
 
 .get-sms {
   cursor: pointer;
+  position: relative;
   text-align: center;
   font-family: "Roboto Bold";
   font-weight: bold;
   color: #135EE4;
+  font-size: 14px;
+  top: 4px;
+  justify-content: center;
+  text-align: center;
+}
+
+.price-container {
+  height: 66px;
 }
 
 .price-total {
@@ -404,14 +490,83 @@ watch(imageCount, () => {
   height: 32px;
 }
 
+.close {
+  margin-left: 320px;
+  margin-top: 18px;
+  position: absolute;
+}
+
+@media (max-width: 400px) {
+  .close {
+    margin-top: 45px;
+    margin-left: 250px;
+  }
+
+}
+
 .title {
-  margin-top: 4px;
+  margin-top: 38px;
+  max-width: 300px;
   font-family: "Montserrat";
   font-weight: 700;
   font-size: 35px;
   line-height: 42px;
   align-items: center;
 }
+
+.title-link {
+  margin-top: 38px;
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 35px;
+  line-height: 42px;
+  align-items: center;
+}
+
+.first-index img.finger-icon {
+  margin-top: -31px;
+}
+
+.description-phone {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 16.8px;
+  margin-bottom: 20px;
+}
+
+.nav-window {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.nav-item {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 19.2px;
+}
+
+.uper-container {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 100px;
+}
+
+.subscribe-to-count button{
+  width: 210px;
+  height: 44px;
+  color: #fafafa;
+  font-size: 16px;
+  line-height: 19.2px;
+  font-family: "Roboto Bold";
+  text-align: center;
+  background: #76BC21;
+}
+
 
 .message {
   margin-top: -6px;
@@ -489,7 +644,6 @@ watch(imageCount, () => {
 }
 
 .img-container {
-  margin-top: 18px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -500,18 +654,23 @@ watch(imageCount, () => {
   margin: 10px;
 }
 
+.img-button, .plus {
+  margin-left: 14px;
+}
+
 .images {
+  cursor: pointer;
   display: flex;
   gap: 0;
   flex-direction: row;
   margin: 0 auto;
 }
 
-.img-container img {
-  margin: 0; /* Reset margin */
+.img-container .window-img {
+  margin: 0 -4px 0 0;
   padding: 0;
-  width: calc(64px - 2.4px);
-  height: 88.61px;
+  width: 60.45px;
+  height: 85.92px;
   object-fit: cover;
 }
 
@@ -526,7 +685,7 @@ watch(imageCount, () => {
   flex-direction: column;
   width: 325px;
   height: 406px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .input-container {
@@ -597,9 +756,20 @@ watch(imageCount, () => {
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
   margin-bottom: 22px;
 }
+
+.finger-icon {
+  position: relative;
+  width: 20x;
+  height: 31px;
+  top: 58px;
+  left: 20px;
+  display: block;
+  z-index: 1;
+}
+
 
 .checkboxes input[type="checkbox"],
 .check1 input[type="checkbox"],
@@ -699,16 +869,15 @@ watch(imageCount, () => {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-left: -122px;
-  margin-top: 14px;
+  margin-top: -10px;
 }
 
 .back-button button {
+  color: #135EE4;
   line-height: 2;
   text-align: left;
   background-color: #fff;
   padding-left: 8px;
-  color: #222222;
   border: 0 solid #135EE4;
   border-radius: 5px;
   font-size: 16px;
@@ -753,13 +922,6 @@ input[type='checkbox']:checked:after {
   color: white;
 }
 
-.get-sms {
-  font-size: 14px;
-  margin-top: -8px;
-  justify-content: center;
-  text-align: center;
-}
-
 .get-sms img {
   width: 16px;
   height: 16px;
@@ -783,10 +945,18 @@ input[type='checkbox'] {
   cursor: pointer;
 }
 
+
 .checkbox label {
   margin-top: 12px;
   color: #707C8B;
   text-align: left;
   font-size: 12px;
+}
+
+
+@media (max-height: 800px){
+  .get-sms {
+    padding-bottom: 50px;
+  }
 }
 </style>
