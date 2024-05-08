@@ -5,16 +5,19 @@
     </div>
     <div class="number" :class="{ 'invalid': error }">
       <div class="minus" @click="decrement">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
+        <svg width="32" height="29" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.3999 14.4999H23.9999" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
         </svg>
+
       </div>
       <input ref="input" type="text" v-model="count" @input="handleInput" @blur="validateInput" :style="{ maxWidth: maxWindowWidth + 'px' }"/>
       <div class="plus" @click="increment">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 18H27" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
-          <path d="M18 27L18 9" stroke="#135EE4" stroke-width="3" stroke-linecap="round"/>
+        <svg width="32" height="29" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 14.4999H23.6" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
+          <path d="M15.8003 21.5713L15.8003 7.42843" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
         </svg>
+
+
       </div>
     </div>
     <div v-if="error && !maxError" class="warning-text">{{ errorText }}</div>
@@ -131,10 +134,10 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 .number {
   max-width: 1800px;
   height: 42px;
-  border: 1px solid #ddd;
   border-radius: 5px;
   display: flex;
   align-items: center;
+  background: #f4f4f4;
 }
 
 .number.invalid {
@@ -164,6 +167,7 @@ input {
   font-weight: bold;
   border: none;
   border-radius: 4px;
+  background: #f4f4f4;
 }
 
 .input-invalid {

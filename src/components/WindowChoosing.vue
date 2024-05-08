@@ -68,19 +68,19 @@ const isPhoneFilled = computed(() => {
 const getImageUrl = (count) => {
   switch (count) {
     case 1:
-      return "/images/window1.svg";
+      return "/images/Gluhaia.svg";
     case 2:
-      return "/images/window2.svg";
+      return "/images/Откидная.svg";
     case 3:
-      return "/images/window3.svg";
+      return "/images/Откидная 2.svg";
     case 4:
-      return "/images/window4.svg";
+      return "/images/Поворотная.svg";
     case 5:
-      return "/images/windows5.svg";
+      return "/images/Поворотная 2.svg";
     case 6:
-      return "/images/window6.svg";
+      return "/images/Поворотно-откидная.svg";
     case 7:
-      return "/images/window7.svg";
+      return "/images/Поворотно-откидная 2.svg";
     default:
       return "";
   }
@@ -151,8 +151,12 @@ const hideHints = () => {
   }
 };
 
+const selectedImageIndex = ref(null);
+const showParameter = ref(false);
 
 const changeImage = (index) => {
+  selectedImageIndex.value = index;
+  showParameter.value = true;
   console.log('Changing image to index:', index);
   const currentImageUrl = images.value[index].src;
   let newImageUrl = "";
@@ -161,11 +165,11 @@ const changeImage = (index) => {
   switch (currentImageUrl) {
     case getImageUrl(1):
       newImageUrl = getImageUrl(2);
-      newWindowType = 'Поворотно-откидная';
+      newWindowType = 'Откидная';
       break;
     case getImageUrl(2):
       newImageUrl = getImageUrl(3);
-      newWindowType = 'Поворотная';
+      newWindowType = 'Откидная';
       break;
     case getImageUrl(3):
       newImageUrl = getImageUrl(4);
@@ -173,15 +177,15 @@ const changeImage = (index) => {
       break;
     case getImageUrl(4):
       newImageUrl = getImageUrl(5);
-      newWindowType = 'Поворотно-откидная';
+      newWindowType = 'Поворотная';
       break;
     case getImageUrl(5):
       newImageUrl = getImageUrl(6);
-      newWindowType = 'Откидная';
+      newWindowType = 'Поворотно откидная';
       break;
     case getImageUrl(6):
       newImageUrl = getImageUrl(7);
-      newWindowType = 'Откидная';
+      newWindowType = 'Поворотно откидная';
       break;
     case getImageUrl(7):
       newImageUrl = getImageUrl(1);
@@ -206,6 +210,7 @@ const changeImage = (index) => {
   setTimeout(() => {
     // Clear the window type after 3 seconds
     windowTypes.value[index] = '';
+    showParameter.value = false;
   }, 10000);
   showIcons.value = false;
 };
@@ -216,7 +221,7 @@ let maxCount = ref(150);
 
 watch(() => imageCount, (newValue, oldValue) => {
   maxCount.value = newValue * 150;
-  console.log('New value of count:', newValue, maxCount.value); // Log the new value of count
+  console.log('New value of count:', newValue, maxCount.value);
 });
 
 const closeModal = () => {
@@ -234,9 +239,8 @@ window.addEventListener('click', (event) => {
   }
 });
 
-// Adăugați un eveniment keydown pentru închiderea modalului atunci când se apasă tasta Escape
 window.addEventListener('keydown', (event) => {
-  const modal = document.getElementById('modal'); // Schimbați 'modal' cu ID-ul real al modalului
+  const modal = document.getElementById('modal');
 
   if (event.key === 'Escape') {
     closeModal();
@@ -254,18 +258,11 @@ watch(imageCount, () => {
       <div class="modal-overlay"></div>
       <div class="modal-content">
         <div class="container">
-          <div class="close"
-               @click="closeModal">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18M6 6L18 18" stroke="#222222" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h1 class="title">Быстрый расчёт окна</h1>
+          <h1 class="title">Оконный калкулятор</h1>
           <div class="img-container">
             <button class="img-button" @click="removeImage">
-              <svg width="22" height="4" viewBox="0 0 22 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 2H20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+              <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 2H16.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
               </svg>
 
             </button>
@@ -273,16 +270,17 @@ watch(imageCount, () => {
               <div v-for="(image, index) in images" :key="index" :class="{ 'first-index': index === 0 }">
                 <img @click="changeImage(index)" v-if="index === 0 && showIcons" src="/images/finger.svg" class="finger-icon" alt="Finger Icon">
                 <img :src="image.src" @click="changeImage(index)" class="window-img" alt="Image"/>
-                <div class="param">
+                <div class="param" v-if="selectedImageIndex === index && showParameter === true">
                   {{ windowTypes[index] }}
                 </div>
               </div>
             </div>
             <button class="img-button plus" @click="addImage">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 11H20" stroke="white" stroke-width="3" stroke-linecap="round"/>
-                <path d="M11 20L11 2" stroke="white" stroke-width="3" stroke-linecap="round"/>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.5 9H16.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
+                <path d="M9 16.5L9 1.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
               </svg>
+
 
             </button>
           </div>
@@ -293,19 +291,21 @@ watch(imageCount, () => {
           <div class="window-option-container">
             <DescriptionSwitcher/>
           </div>
-          <div class="price-container">
-            <div class="price-total">{{ formattedTotalPrice }} <span style="font-family: Roboto Bold,serif;">₽</span></div>
+          <div class="overflow-container">
+            <div class="price-container">
+              <div class="price-total">{{ formattedTotalPrice }} <span style="font-family: Roboto Bold,serif;">₽</span></div>
+              <br>
+            </div>
+            <div class="warning-description">
+              Стоимость оконного изделия <br> без учёта скидок, монтажа и внешних деталей
+            </div>
             <br>
-          </div>
-          <div class="warning-description">
-            Стоимость выбранного окна без учёта скидок,<br> монтажа, откосов, отлива, подоконника и ручек
-          </div>
-          <br>
-          <div class="submit-button showModalButton">
-            <button @click="showContactManagerModal = true; showModal = false;">Записаться на бесплатный замер</button>
-          </div>
-          <div class="get-sms" @click="showGetCalculationModal = true; showModal = false">
-            Получить ссылку на расчёт в СМС
+            <div class="submit-button showModalButton">
+              <button @click="showContactManagerModal = true; showModal = false;">Заказать бесплатный замер</button>
+            </div>
+            <div class="get-sms" @click="showGetCalculationModal = true; showModal = false">
+              Получить ссылку на расчёт в СМС
+            </div>
           </div>
         </div>
       </div>
@@ -400,7 +400,7 @@ watch(imageCount, () => {
     <div class="modal-overlay"></div>
     <div class="modal-content">
       <h1 class="title">Спасибо!</h1>
-      <div class="message">Мы свяжемся с Вами в ближайшее время</div>
+      <div class="message">Ссылка на расчёт выслана <br> по СМС на указанный номер телефона</div>
       <br>
       <br>
       <div class="submit-button">
@@ -418,6 +418,19 @@ watch(imageCount, () => {
   max-height: 100vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.overflow-container {
+  bottom: 0; /* Add shadow */
+}
+
+@media (max-height: 700px) {
+  .overflow-container {
+    width: 105%;
+    position: sticky;
+    background: #fafafa;
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .submit-button button:disabled {
@@ -455,11 +468,20 @@ watch(imageCount, () => {
 
 .param {
   text-align: center;
-  width: 62px; /* Changed from 62,36px */
+  width: 61px;
+  height: 25px;
   font-family: Roboto;
-  font-size: 10px;
+  font-size: 8px;
   position: absolute;
-  color: #0e4fae;
+  color: #222222;
+  background: #f2f2f2;
+  margin-top: -26px;
+  border-radius: 4px;
+  line-height: 8px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
 }
 
 .get-sms {
@@ -469,7 +491,7 @@ watch(imageCount, () => {
   font-family: "Roboto Bold";
   font-weight: bold;
   color: #135EE4;
-  font-size: 14px;
+  font-size: 18px;
   top: 4px;
   justify-content: center;
   text-align: center;
@@ -509,8 +531,8 @@ watch(imageCount, () => {
   max-width: 300px;
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 35px;
-  line-height: 42px;
+  font-size: 30px;
+  line-height: 30px;
   align-items: center;
 }
 
@@ -569,6 +591,7 @@ watch(imageCount, () => {
 
 
 .message {
+  width: 305px;
   margin-top: -6px;
 }
 
@@ -577,10 +600,10 @@ watch(imageCount, () => {
   align-items: center;
   text-align: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background-color: #134EE4;
-  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  background: #F6F6F6;
+  border-radius: 6px;
   font-size: 1px;
 }
 
@@ -605,7 +628,7 @@ watch(imageCount, () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 
 .modal-overlay {
@@ -622,7 +645,7 @@ watch(imageCount, () => {
   flex-direction: column;
   position: relative;
   width: 390px;
-  height: 872px;
+  height: 710px;
   border-radius: 12px;
   justify-items: center;
   align-items: center;
@@ -639,7 +662,7 @@ watch(imageCount, () => {
 .window-params-container {
   display: flex;
   flex-direction: row;
-  margin-top: 44px;
+  margin-top: 14px;
   gap: 20px;
 }
 
