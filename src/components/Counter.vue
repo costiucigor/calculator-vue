@@ -12,12 +12,10 @@
       </div>
       <input ref="input" type="text" v-model="count" @input="handleInput" @blur="validateInput" :style="{ maxWidth: maxWindowWidth + 'px' }"/>
       <div class="plus" @click="increment">
-        <svg width="32" height="29" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 14.4999H23.6" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
-          <path d="M15.8003 21.5713L15.8003 7.42843" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 9H16" stroke="#B5BBC2" stroke-width="3" stroke-linecap="round"/>
+          <path d="M9 16L9 2" stroke="#B5BBC2" stroke-width="3" stroke-linecap="round"/>
         </svg>
-
-
       </div>
     </div>
     <div v-if="error && !maxError" class="warning-text">{{ errorText }}</div>
@@ -132,7 +130,6 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 
 <style scoped>
 .number {
-  max-width: 1800px;
   height: 42px;
   border-radius: 5px;
   display: flex;
@@ -161,7 +158,7 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 }
 
 input {
-  width: 64px;
+  width: 58px;
   text-align: center;
   font-size: 22px;
   font-weight: bold;

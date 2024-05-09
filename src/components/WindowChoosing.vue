@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, defineProps, defineEmits, watch} from 'vue';
+import {ref, computed, defineProps, defineEmits, watch, onMounted, onUnmounted} from 'vue';
 import Counter from "./Counter.vue";
 import DescriptionSwitcher from "./DescriptionSwitcher.vue";
 import store from "../store/index.js";
@@ -181,11 +181,11 @@ const changeImage = (index) => {
       break;
     case getImageUrl(5):
       newImageUrl = getImageUrl(6);
-      newWindowType = 'Поворотно откидная';
+      newWindowType = 'Поворотно-откидная';
       break;
     case getImageUrl(6):
       newImageUrl = getImageUrl(7);
-      newWindowType = 'Поворотно откидная';
+      newWindowType = 'Поворотно-откидная';
       break;
     case getImageUrl(7):
       newImageUrl = getImageUrl(1);
@@ -208,10 +208,9 @@ const changeImage = (index) => {
   hideHints();
 
   setTimeout(() => {
-    // Clear the window type after 3 seconds
     windowTypes.value[index] = '';
     showParameter.value = false;
-  }, 10000);
+  }, 5000);
   showIcons.value = false;
 };
 
@@ -250,6 +249,7 @@ window.addEventListener('keydown', (event) => {
 watch(imageCount, () => {
   totalPrice.value;
 });
+
 </script>
 
 <template>
@@ -258,13 +258,12 @@ watch(imageCount, () => {
       <div class="modal-overlay"></div>
       <div class="modal-content">
         <div class="container">
-          <h1 class="title">Оконный калкулятор</h1>
+          <h1 class="title">Оконный калькулятор</h1>
           <div class="img-container">
             <button class="img-button" @click="removeImage">
               <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.5 2H16.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
+                <path d="M2 2H16" stroke="#B5BBC2" stroke-width="3" stroke-linecap="round"/>
               </svg>
-
             </button>
             <div class="images">
               <div v-for="(image, index) in images" :key="index" :class="{ 'first-index': index === 0 }">
@@ -277,11 +276,9 @@ watch(imageCount, () => {
             </div>
             <button class="img-button plus" @click="addImage">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1.5 9H16.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
-                <path d="M9 16.5L9 1.5" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
+                <path d="M2 9H16" stroke="#B5BBC2" stroke-width="3" stroke-linecap="round"/>
+                <path d="M9 16L9 2" stroke="#B5BBC2" stroke-width="3" stroke-linecap="round"/>
               </svg>
-
-
             </button>
           </div>
           <div class="window-params-container">
@@ -421,7 +418,11 @@ watch(imageCount, () => {
 }
 
 .overflow-container {
-  bottom: 0; /* Add shadow */
+  bottom: 0;
+}
+
+.overflow-container.no-shadow {
+  box-shadow: none;
 }
 
 @media (max-height: 700px) {
@@ -491,7 +492,7 @@ watch(imageCount, () => {
   font-family: "Roboto Bold";
   font-weight: bold;
   color: #135EE4;
-  font-size: 18px;
+  font-size: 16px;
   top: 4px;
   justify-content: center;
   text-align: center;
@@ -540,7 +541,7 @@ watch(imageCount, () => {
   margin-top: 38px;
   font-family: "Montserrat";
   font-weight: 700;
-  font-size: 35px;
+  font-size: 30px;
   line-height: 42px;
   align-items: center;
 }
@@ -733,7 +734,8 @@ watch(imageCount, () => {
   font-size: 16px;
   font-family: "Roboto";
   font-weight: 400;
-  border: 1px solid #ccc;
+  border: 1px solid  #f4f4f4;
+  background: #f4f4f4;
   border-radius: 5px;
   box-sizing: border-box;
   text-align: left;

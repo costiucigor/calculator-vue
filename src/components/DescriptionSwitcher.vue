@@ -18,17 +18,15 @@ const switchName = (direction) => {
 <template>
   <div class="name-switcher">
     <div class="arrow left" @click="switchName(-1)">
-      <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15.5039 4.80007L9.16502 11.139C8.41641 11.8876 8.41641 13.1126 9.16502 13.8612L15.5039 20.2001" stroke="#B5BBC2" stroke-width="1.793" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13 4L6.56957 10.1742C5.81014 10.9034 5.81014 12.0966 6.56957 12.8258L13 19" stroke="#B5BBC2" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-
     </div>
     <div class="name">{{ currentName }}</div>
     <div class="arrow right" @click="switchName(1)">
-      <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.49609 4.80008L15.835 11.139C16.5836 11.8876 16.5836 13.1126 15.835 13.8612L9.49609 20.2001" stroke="#B5BBC2" stroke-width="1.793" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 4L16.4304 10.1742C17.1899 10.9034 17.1899 12.0966 16.4304 12.8258L10 19" stroke="#B5BBC2" stroke-width="3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-
     </div>
   </div>
   <div class="content">
@@ -70,7 +68,7 @@ const switchName = (direction) => {
   cursor: pointer;
   font-size: 20px;
   width: 35px;
-  height: 35px;
+  height: 44px;
   background-color: #f4f4f4;
 }
 
@@ -97,8 +95,8 @@ const switchName = (direction) => {
   align-items: center;
   justify-content: center;
   background-color: #f4f4f4;
-  width: 280px;
-  height: 35px;
+  width: 240px;
+  height: 44px;
 }
 
 .description,
