@@ -1,5 +1,16 @@
 <script setup>
-import {ref, computed, defineProps, defineEmits, watch, onMounted, onUnmounted} from 'vue';
+import {
+  ref,
+  computed,
+  defineProps,
+  defineEmits,
+  watch,
+  onMounted,
+  onUnmounted,
+  onActivated,
+  nextTick,
+  onBeforeUnmount
+} from 'vue';
 import Counter from "./Counter.vue";
 import DescriptionSwitcher from "./DescriptionSwitcher.vue";
 import store from "../store/index.js";
@@ -17,7 +28,6 @@ const showIcons = ref(true);
 const isFingerIconActive = computed(() => {
   return showIcons.value;
 });
-
 
 const showModalRef = ref(props.showModal);
 const showContactManagerModalRef = ref(props.showContactManagerModal);
@@ -197,7 +207,6 @@ const changeImage = (index) => {
       break;
   }
 
-  // Update the image URL and window type for the selected index
   images.value[index].src = newImageUrl;
   windowTypes.value[index] = newWindowType;
 
@@ -220,7 +229,40 @@ let maxCount = ref(150);
 
 watch(() => imageCount, (newValue, oldValue) => {
   maxCount.value = newValue * 150;
-  console.log('New value of count:', newValue, maxCount.value);
+});
+
+const showShadow = ref(true);
+const scrollY = ref(0);
+const screenHeight = ref(window.innerHeight);
+
+const handleScroll = (event) => {
+  scrollY.value = event.target.scrollTop;
+  showShadow.value = scrollY.value <= 0;
+};
+
+const handleResize = () => {
+  screenHeight.value = window.innerHeight;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+const containerStyle = computed(() => {
+  if (screenHeight.value <= 700) {
+    return {
+      width: '105%',
+      position: 'sticky',
+      background: 'white',
+      boxShadow: showShadow.value ? '0px -5px 10px rgba(0, 0, 0, 0.1)' : 'none'
+    };
+  } else {
+    return {};
+  }
 });
 
 const closeModal = () => {
@@ -256,7 +298,7 @@ watch(imageCount, () => {
   <div>
     <div class="modal-container" v-if="showModal && !showContactManagerModal">
       <div class="modal-overlay"></div>
-      <div class="modal-content">
+      <div class="modal-content"  @scroll="handleScroll">
         <div class="container">
           <h1 class="title">Оконный калькулятор</h1>
           <div class="img-container">
@@ -288,7 +330,7 @@ watch(imageCount, () => {
           <div class="window-option-container">
             <DescriptionSwitcher/>
           </div>
-          <div class="overflow-container">
+          <div class="overflow-container" :style="containerStyle" @scroll="handleScroll">
             <div class="price-container">
               <div class="price-total">{{ formattedTotalPrice }} <span style="font-family: Roboto Bold,serif;">₽</span></div>
               <br>
@@ -310,7 +352,7 @@ watch(imageCount, () => {
 
     <div class="modal-container" v-if="showGetCalculationModal">
       <div class="modal-overlay"></div>
-      <div class="modal-content">
+      <div class="modal-content" id="modal">
         <h1 class="title-link">Получить ссылку</h1>
         <div class="description-phone">
           Мы пришлём вам ссылку на этот расчёт по СМС
@@ -349,7 +391,7 @@ watch(imageCount, () => {
 
     <div class="modal-container" v-if="showContactManagerModal">
       <div class="modal-overlay"></div>
-      <div class="modal-content" style="overflow-y: hidden">
+      <div class="modal-content" id="modal" style="overflow-y: hidden">
         <h1 class="title">Записаться на бесплатный замер</h1>
         <div class="contact-form">
           <div class="inputs">
@@ -395,7 +437,7 @@ watch(imageCount, () => {
   </div>
   <div class="modal-container" v-if="showThankYouModal">
     <div class="modal-overlay"></div>
-    <div class="modal-content">
+    <div class="modal-content" id="modal">
       <h1 class="title">Спасибо!</h1>
       <div class="message">Ссылка на расчёт выслана <br> по СМС на указанный номер телефона</div>
       <br>
@@ -421,17 +463,8 @@ watch(imageCount, () => {
   bottom: 0;
 }
 
-.overflow-container.no-shadow {
+.shadow-hidden {
   box-shadow: none;
-}
-
-@media (max-height: 700px) {
-  .overflow-container {
-    width: 105%;
-    position: sticky;
-    background: #fafafa;
-    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
-  }
 }
 
 .submit-button button:disabled {
@@ -645,7 +678,7 @@ watch(imageCount, () => {
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 390px;
+  width: 389px;
   height: 710px;
   border-radius: 12px;
   justify-items: center;
