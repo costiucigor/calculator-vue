@@ -359,7 +359,7 @@ watch(imageCount, () => {
 
     <div class="modal-container" v-if="showGetCalculationModal">
       <div class="modal-overlay"></div>
-      <div class="modal-content" id="modal">
+      <div class="modal-content" style="overflow: hidden" id="modal">
         <h1 class="title-link">Получить ссылку</h1>
         <div class="description-phone">
           Мы пришлём вам ссылку на этот расчёт по СМС
