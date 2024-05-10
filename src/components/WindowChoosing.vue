@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
 });
 
 const containerStyle = computed(() => {
-  if (screenHeight.value <= 700) {
+  if (screenHeight.value <= 630) {
     return {
       width: '105%',
       position: 'sticky',
@@ -461,7 +461,7 @@ watch(imageCount, () => {
 
 <style scoped>
 .modal-content {
-  max-height: 100vh;
+  max-height: 112vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -687,7 +687,7 @@ watch(imageCount, () => {
   position: relative;
   width: 389px;
   height: 710px;
-  border-radius: 12px;
+  border-radius: 20px;
   justify-items: center;
   align-items: center;
   background-color: white;
@@ -784,7 +784,8 @@ watch(imageCount, () => {
 
 .input-container input::placeholder {
   font-family: Roboto, serif;
-  color: #B5BBC2;
+  color: #707C8B;
+  font-weight: 400;
   font-size: 16px;
   line-height: 24px;
 }
