@@ -164,6 +164,8 @@ const hideHints = () => {
 const selectedImageIndex = ref(null);
 const showParameter = ref(false);
 
+let timeoutId = null;
+
 const changeImage = (index) => {
   selectedImageIndex.value = index;
   showParameter.value = true;
@@ -216,10 +218,15 @@ const changeImage = (index) => {
 
   hideHints();
 
-  setTimeout(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+
+  // Set a new timeout
+  timeoutId = setTimeout(() => {
     windowTypes.value[index] = '';
     showParameter.value = false;
-  }, 5000);
+  }, 2000);
   showIcons.value = false;
 };
 
@@ -237,7 +244,7 @@ const screenHeight = ref(window.innerHeight);
 
 const handleScroll = (event) => {
   scrollY.value = event.target.scrollTop;
-  showShadow.value = scrollY.value <= 0;
+  showShadow.value = scrollY.value <= 10;
 };
 
 const handleResize = () => {
@@ -460,6 +467,14 @@ watch(imageCount, () => {
 </template>
 
 <style scoped>
+.input-container input {
+  background-color: #f4f4f4; /* задайте желаемый цвет фона */
+}
+
+.custom-checkbox+label::before {
+  background-color: #f4f4f4; /* задайте желаемый цвет фона */
+}
+
 .modal-content {
   max-height: 112vh;
   overflow-y: auto;
