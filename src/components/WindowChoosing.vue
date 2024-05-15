@@ -1040,4 +1040,11 @@ input[type='checkbox'] {
     padding-bottom: 50px;
   }
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+  transition: background-color 5000000s ease-in-out 0s;
+}
 </style>

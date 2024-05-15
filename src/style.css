@@ -19,10 +19,6 @@
   src: url("/fonts/Roboto-Bold.ttf") format("truetype");
 }
 
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px white inset !important;
-}
-
 body {
   overflow: hidden;
 }
