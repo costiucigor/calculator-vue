@@ -67,8 +67,8 @@ const windowType = ref('');
 
 const name = ref('')
 const phone = ref('');
-const checked1 = ref(false);
-const checked2 = ref(false);
+const checked1 = ref(true);
+const checked2 = ref(true);
 
 const isPhoneFilled = computed(() => {
   return phone.value.trim() !== '';
@@ -197,7 +197,7 @@ const changeImage = (index) => {
       break;
     case getImageUrl(6):
       newImageUrl = getImageUrl(7);
-      newWindowType = 'Поворотно-откидная';
+      newWindowType = 'Поворотно-откидная';f
       break;
     case getImageUrl(7):
       newImageUrl = getImageUrl(1);
