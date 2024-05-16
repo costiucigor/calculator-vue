@@ -197,7 +197,7 @@ const changeImage = (index) => {
       break;
     case getImageUrl(6):
       newImageUrl = getImageUrl(7);
-      newWindowType = 'Поворотно-откидная';f
+      newWindowType = 'Поворотно-откидная';
       break;
     case getImageUrl(7):
       newImageUrl = getImageUrl(1);
@@ -222,7 +222,6 @@ const changeImage = (index) => {
     clearTimeout(timeoutId);
   }
 
-  // Set a new timeout
   timeoutId = setTimeout(() => {
     windowTypes.value[index] = '';
     showParameter.value = false;
