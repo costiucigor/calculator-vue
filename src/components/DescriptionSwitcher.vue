@@ -47,9 +47,13 @@ const switchName = (direction) => {
 }
 
 .content {
+  position: relative;
   margin-top: 12px;
   width: 100%;
   max-width: 325px;
+  min-width: 325px;
+  max-height: 80px;
+  min-height: 80px;
   padding: 0 20px;
   text-align: center;
 }
