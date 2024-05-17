@@ -8,7 +8,6 @@
         <svg width="32" height="29" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M8.3999 14.4999H23.9999" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
         </svg>
-
       </div>
       <input ref="input" type="text" v-model="count" @input="handleInput" @blur="validateInput" :style="{ maxWidth: maxWindowWidth + 'px' }"/>
       <div class="plus" @click="increment">
@@ -23,7 +22,7 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted, watch} from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 // Define props
 const props = defineProps({
@@ -40,7 +39,7 @@ onMounted(() => {
   console.log('Initial maxCount:', props.maxCount);
 
   // Watch for updates to props.maxCount
-  watch(() => props.maxCount, (newValue, oldValue) => {
+  watch(() => props.maxCount, (newValue) => {
     console.log('maxCount updated:', newValue);
     // You can perform any necessary actions here when maxCount changes
   });
@@ -53,7 +52,6 @@ const errorText = ref('');
 const maxError = ref(false);
 
 // Define functions
-
 const validateInput = () => {
   let inputNumber = count.value;
   if (inputNumber < 50) {
@@ -104,11 +102,10 @@ const increment = () => {
   }
 };
 
-
 const decrement = () => {
   maxError.value = false;
   if (count.value > 50) {
-    count.value = Math.max(50, count.value - 10)
+    count.value = Math.max(50, count.value - 10);
     validateInput(); // Validate input after decrementing count
   } else {
     error.value = true;
@@ -118,7 +115,7 @@ const decrement = () => {
 };
 
 // Calculate max window width based on quantity of sashes
-watch(() => props.maxCount, (newValue, oldValue) => {
+watch(() => props.maxCount, (newValue) => {
   console.log('maxCount updated:', newValue);
   count.value = newValue; // Update count when maxCount changes
 });
@@ -129,12 +126,14 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 </script>
 
 <style scoped>
+.container-counter {
+  position: relative;
+}
+
 .number {
-  width: 136px;
-  height: 42px;
-  border-radius: 5px;
   display: flex;
   align-items: center;
+  border-radius: 5px;
   background: #f4f4f4;
 }
 
@@ -144,18 +143,12 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 
 .minus,
 .plus {
-  margin-right: 10px;
-  color: #135EE4;
-  width: 21px;
-  margin-top: 8px;
-  border-radius: 4px;
+  width: 32px;
+  height: 42px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 8px 5px;
   cursor: pointer;
-}
-
-.invalid {
-  border-color: red;
 }
 
 input {
@@ -166,6 +159,7 @@ input {
   border: none;
   border-radius: 4px;
   background: #f4f4f4;
+  margin: 0 5px;
 }
 
 @media not all and (min-resolution:.001dpcm) {
@@ -176,15 +170,12 @@ input {
   }
 }
 
-.input-invalid {
-  border-color: red;
-}
-
 .warning-text {
-  margin-left: 14px;
+  margin-left: 2px;
   position: absolute;
   color: red;
   font-size: 12px;
+  width: 150px;
   margin-top: 1px;
 }
 
