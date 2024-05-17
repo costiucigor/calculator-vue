@@ -491,8 +491,9 @@ watch(imageCount, () => {
   display: flex;
   flex-direction: column;
   position: absolute;
-  width: 389px;
-  height: 710px;
+  width: 364px;
+  overflow-x: hidden;
+  height: 678px;
   max-height: 112vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -537,6 +538,7 @@ watch(imageCount, () => {
 }
 
 .contact-form {
+  align-items: center;
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -716,14 +718,17 @@ watch(imageCount, () => {
 
 .param {
   text-align: center;
-  width: 61px;
-  height: 25px;
+  width: 57px;
+  height: 24px;
   font-family: Roboto;
+  font-weight: 400;
   font-size: 8px;
   position: absolute;
   color: #222222;
   background: #f2f2f2;
-  margin-top: -26px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  margin-top: -102px;
+  margin-left: -0.8px;
   border-radius: 4px;
   line-height: 8px;
   align-items: center;
@@ -894,8 +899,8 @@ watch(imageCount, () => {
 .img-container .window-img {
   margin: 0 -4px 0 0;
   padding: 0;
-  width: 60.45px;
-  height: 85.92px;
+  width: 55.45px;
+  height: 79.92px;
   object-fit: cover;
 }
 
@@ -909,8 +914,8 @@ watch(imageCount, () => {
   position: relative;
   width: 20x;
   height: 31px;
-  top: 58px;
-  left: 20px;
+  top: 56px;
+  left: 17px;
   display: block;
   z-index: 1;
 }
@@ -1000,9 +1005,9 @@ input[type='checkbox'] {
   font-size: 12px;
 }
 
-@media (max-height: 800px) {
+@media (max-height: 625px) {
   .get-sms {
-    padding-bottom: 50px;
+    padding-bottom: 40px;
   }
 }
 
