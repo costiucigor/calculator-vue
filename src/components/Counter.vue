@@ -130,6 +130,7 @@ watch(() => props.maxCount, (newValue, oldValue) => {
 
 <style scoped>
 .number {
+  width: 136px;
   height: 42px;
   border-radius: 5px;
   display: flex;

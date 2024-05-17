@@ -491,7 +491,7 @@ watch(imageCount, () => {
   display: flex;
   flex-direction: column;
   position: absolute;
-  width: 364px;
+  width: 348px;
   overflow-x: hidden;
   height: 678px;
   max-height: 112vh;
@@ -542,7 +542,7 @@ watch(imageCount, () => {
   position: fixed;
   display: flex;
   flex-direction: column;
-  width: 325px;
+  width: 290px;
   height: 406px;
   margin-top: 10px;
 }
@@ -570,7 +570,7 @@ watch(imageCount, () => {
 }
 
 .input-container input {
-  width: 325px;
+  width: 290px;
   height: 50px;
   padding: 14px;
   font-size: 16px;
@@ -601,7 +601,7 @@ watch(imageCount, () => {
 }
 
 .submit-button button {
-  width: 325px;
+  width: 290px;
   height: 50px;
   background-color: #135EE4;
   color: #fff;
@@ -646,7 +646,7 @@ watch(imageCount, () => {
 .checkboxes {
   display: flex;
   flex-direction: column;
-  width: 325px;
+  width: 290px;
   height: 78px;
   margin-top: 16px;
 }
@@ -765,7 +765,7 @@ watch(imageCount, () => {
 }
 
 .close {
-  margin-left: 320px;
+  margin-left: 286px;
   margin-top: 18px;
   position: absolute;
 }
@@ -921,8 +921,10 @@ watch(imageCount, () => {
 }
 
 .warning-description {
+  width: 290px;
   font-family: Roboto;
-  font-size: 14px;
+  align-items: center;
+  font-size: 13px;
   font-weight: 400;
   line-height: 16.8px;
   text-align: center;
@@ -1027,6 +1029,9 @@ input:-webkit-autofill:active {
 }
 
 .overflow-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   bottom: 0;
 }
 </style>

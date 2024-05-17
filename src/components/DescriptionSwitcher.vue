@@ -42,7 +42,7 @@ const switchName = (direction) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 325px;
+  width: 290px;
   height: 44px;
 }
 
@@ -50,8 +50,8 @@ const switchName = (direction) => {
   position: relative;
   margin-top: 12px;
   width: 100%;
-  max-width: 325px;
-  min-width: 325px;
+  max-width: 290px;
+  min-width: 290px;
   max-height: 80px;
   min-height: 80px;
   padding: 0 20px;
@@ -93,7 +93,7 @@ const switchName = (direction) => {
 .name {
   cursor: default;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 18px;
   font-family: "Roboto Bold";
   display: flex;
   align-items: center;
