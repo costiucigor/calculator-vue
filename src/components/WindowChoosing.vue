@@ -1042,6 +1042,6 @@ input:-webkit-autofill:active {
 }
 
 .finger-icon-flash {
-  animation: flash 1.5s infinite;
+  animation: flash 1.2s infinite;
 }
 </style>
