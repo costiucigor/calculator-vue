@@ -225,7 +225,7 @@ const changeImage = (index) => {
   timeoutId = setTimeout(() => {
     windowTypes.value[index] = '';
     showParameter.value = false;
-  }, 1000);
+  }, 800);
   showIcons.value = false;
 };
 
