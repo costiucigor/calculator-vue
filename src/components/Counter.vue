@@ -162,14 +162,6 @@ input {
   margin: 0 5px;
 }
 
-@media not all and (min-resolution:.001dpcm) {
-  @supports (-webkit-appearance:none) {
-    input {
-      width: 50px;
-    }
-  }
-}
-
 .warning-text {
   margin-left: 2px;
   position: absolute;

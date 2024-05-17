@@ -322,7 +322,7 @@ watch(imageCount, () => {
             </button>
             <div class="images">
               <div v-for="(image, index) in images" :key="index" :class="{ 'first-index': index === 0 }">
-                <img @click="changeImage(index)" v-if="index === 0 && showIcons" src="/images/finger.svg" class="finger-icon" alt="Finger Icon">
+                <img @click="changeImage(index)" v-if="index === 0 && showIcons" src="/images/finger.svg" class="finger-icon finger-icon-flash" alt="Finger Icon">
                 <img :src="image.src" @click="changeImage(index)" class="window-img" alt="Image"/>
                 <div class="param" v-if="selectedImageIndex === index && showParameter === true">
                   {{ windowTypes[index] }}
@@ -1033,5 +1033,15 @@ input:-webkit-autofill:active {
   flex-direction: column;
   align-items: center;
   bottom: 0;
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.finger-icon-flash {
+  animation: flash 2s infinite;
 }
 </style>
