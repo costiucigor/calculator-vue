@@ -168,6 +168,14 @@ input {
   background: #f4f4f4;
 }
 
+@media not all and (min-resolution:.001dpcm) {
+  @supports (-webkit-appearance:none) {
+    input {
+      width: 50px;
+    }
+  }
+}
+
 .input-invalid {
   border-color: red;
 }
