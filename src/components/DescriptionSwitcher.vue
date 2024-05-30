@@ -43,7 +43,7 @@ const switchName = (direction) => {
   align-items: center;
   justify-content: center;
   width: 290px;
-  height: 44px;
+  height: auto;
 }
 
 .content {
@@ -52,8 +52,6 @@ const switchName = (direction) => {
   width: 100%;
   max-width: 290px;
   min-width: 290px;
-  max-height: 80px;
-  min-height: 80px;
   padding: 0 20px;
   text-align: center;
 }
