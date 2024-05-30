@@ -493,8 +493,8 @@ watch(imageCount, () => {
   position: absolute;
   width: 348px;
   overflow-x: hidden;
-  height: 678px;
-  max-height: 112vh;
+  height: 700px;
+  max-height: 120vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 20px;
