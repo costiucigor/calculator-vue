@@ -899,7 +899,7 @@ watch(imageCount, () => {
 .img-container .window-img {
   margin: 0 -4px 0 0;
   padding: 0;
-  width: 55.45px;
+  width: 60px;
   height: 79.92px;
   object-fit: cover;
 }
