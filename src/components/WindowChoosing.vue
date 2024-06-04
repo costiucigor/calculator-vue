@@ -261,7 +261,7 @@ onBeforeUnmount(() => {
 const containerStyle = computed(() => {
   if (screenHeight.value <= 630) {
     return {
-      width: '105%',
+      width: '110vw',
       position: 'sticky',
       background: 'white',
       boxShadow: showShadow.value ? '0px -5px 10px rgba(0, 0, 0, 0.1)' : 'none'
