@@ -504,6 +504,14 @@ watch(imageCount, () => {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+@media (max-width: 780px) {
+  .modal-content {
+    padding-top: 200px;
+    padding-bottom: 200px;
+    width: 110vw;
+  }
+}
+
 @media screen and (max-height: 400px), (max-width: 500px) {
   .modal-content {
     max-height: 100vh;
