@@ -3,7 +3,7 @@
     <div class="title">
       {{ title }}
     </div>
-    <div class="number" :class="{ 'invalid': error }">
+    <div class="number">
       <div class="minus" @click="decrement">
         <svg width="32" height="29" viewBox="0 0 32 29" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M8.3999 14.4999H23.9999" stroke="#B5BBC2" stroke-width="2.39066" stroke-linecap="round"/>
@@ -17,7 +17,7 @@
         </svg>
       </div>
     </div>
-    <div v-if="error && !maxError" class="warning-text">{{ errorText }}</div>
+    <div v-if="error" class="warning-text">{{ errorText }}</div>
   </div>
 </template>
 
@@ -35,37 +35,21 @@ const props = defineProps({
 // Destructure props
 const { title, maxCount } = props;
 
-onMounted(() => {
-  console.log('Initial maxCount:', props.maxCount);
-
-  // Watch for updates to props.maxCount
-  watch(() => props.maxCount, (newValue) => {
-    console.log('maxCount updated:', newValue);
-    // You can perform any necessary actions here when maxCount changes
-  });
-});
-
 // Define reactive variables
 let count = ref(props.maxCount);
 const error = ref(false);
 const errorText = ref('');
-const maxError = ref(false);
+const minSashSize = 50;
 
 // Define functions
 const validateInput = () => {
   let inputNumber = count.value;
-  if (inputNumber < 50) {
-    count.value = '50'; // Adjust input to minimum value
-    error.value = true;
-    errorText.value = 'Минимальный размер';
-    hideErrorMessage();
-  } else if (inputNumber > props.maxCount) { // Adjusted condition
-    count.value = props.maxCount; // Adjust input to maximum value
+  if (inputNumber > props.maxCount) {
+    count.value = props.maxCount;
     error.value = true;
     errorText.value = 'Максимальный размер';
     hideErrorMessage();
   } else {
-    // No error if the input number is within the valid range
     error.value = false;
     errorText.value = '';
   }
@@ -75,54 +59,34 @@ const hideErrorMessage = () => {
   setTimeout(() => {
     error.value = false;
     errorText.value = '';
-    maxError.value = false; // Reset maxError flag after hiding error message
   }, 3000);
 };
 
 const handleInput = () => {
-  // Remove non-numeric characters
   count.value = count.value.replace(/\D/g, '');
 };
 
 const increment = () => {
   const currentValue = parseInt(count.value);
-  const incrementedValue = Math.min(currentValue + 10, props.maxCount); // Increment while respecting maxCount
+  const incrementedValue = Math.min(currentValue + 10, props.maxCount);
   count.value = incrementedValue;
+  validateInput();
+};
 
-  if (currentValue === 50) {
-    error.value = false;
-  }
-
-  if (incrementedValue === props.maxCount) {
-    error.value = true;
-    errorText.value = 'Максимальный размер';
-    hideErrorMessage();
-  } else {
+const decrement = () => {
+  if (count.value > 0) {
+    count.value = Math.max(0, count.value - 10);
     validateInput();
   }
 };
 
-const decrement = () => {
-  maxError.value = false;
-  if (count.value > 50) {
-    count.value = Math.max(50, count.value - 10);
-    validateInput(); // Validate input after decrementing count
-  } else {
-    error.value = true;
-    errorText.value = 'Минимальный размер';
-    hideErrorMessage();
-  }
-};
-
-// Calculate max window width based on quantity of sashes
-watch(() => props.maxCount, (newValue) => {
-  console.log('maxCount updated:', newValue);
-  count.value = newValue; // Update count when maxCount changes
+// Watch for updates to props.maxCount
+onMounted(() => {
+  watch(() => props.maxCount, (newValue) => {
+    console.log('maxCount updated:', newValue);
+    count.value = newValue;
+  });
 });
-
-// Calculate max window width based on quantity of sashes
-
-// Validate input on initial load
 </script>
 
 <style scoped>
@@ -135,10 +99,6 @@ watch(() => props.maxCount, (newValue) => {
   align-items: center;
   border-radius: 5px;
   background: #f4f4f4;
-}
-
-.number.invalid {
-  border-color: red;
 }
 
 .minus,

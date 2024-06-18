@@ -80,17 +80,7 @@ const getImageUrl = (count) => {
     case 1:
       return "/images/Gluhaia.svg";
     case 2:
-      return "/images/Откидная.svg";
-    case 3:
-      return "/images/Откидная 2.svg";
-    case 4:
-      return "/images/Поворотная.svg";
-    case 5:
-      return "/images/Поворотная 2.svg";
-    case 6:
       return "/images/Поворотно-откидная.svg";
-    case 7:
-      return "/images/Поворотно-откидная 2.svg";
     default:
       return "";
   }
@@ -177,35 +167,15 @@ const changeImage = (index) => {
   switch (currentImageUrl) {
     case getImageUrl(1):
       newImageUrl = getImageUrl(2);
-      newWindowType = 'Откидная';
+      newWindowType = 'Поворотно-откидная';
       break;
     case getImageUrl(2):
-      newImageUrl = getImageUrl(3);
-      newWindowType = 'Откидная';
-      break;
-    case getImageUrl(3):
-      newImageUrl = getImageUrl(4);
-      newWindowType = 'Поворотная';
-      break;
-    case getImageUrl(4):
-      newImageUrl = getImageUrl(5);
-      newWindowType = 'Поворотная';
-      break;
-    case getImageUrl(5):
-      newImageUrl = getImageUrl(6);
-      newWindowType = 'Поворотно-откидная';
-      break;
-    case getImageUrl(6):
-      newImageUrl = getImageUrl(7);
-      newWindowType = 'Поворотно-откидная';
-      break;
-    case getImageUrl(7):
       newImageUrl = getImageUrl(1);
       newWindowType = 'Глухая';
       break;
     default:
       newImageUrl = getImageUrl(1);
-      newWindowType = '';
+      newWindowType = null;
       break;
   }
 
@@ -259,16 +229,17 @@ onBeforeUnmount(() => {
 });
 
 const containerStyle = computed(() => {
-  if (screenHeight.value <= 630) {
-    return {
-      width: '110vw',
-      position: 'sticky',
-      background: 'white',
-      boxShadow: showShadow.value ? '0px -5px 10px rgba(0, 0, 0, 0.1)' : 'none'
-    };
-  } else {
-    return {};
-  }
+  return screenHeight.value <= 800
+      ? {
+        width: '110vw',
+        position: 'sticky',
+        background: 'white',
+        boxShadow: showShadow.value ? '0px -5px 10px rgba(0, 0, 0, 0.1)' : 'none',
+        transition: 'all 0.3s ease', // Added smooth transition for style changes
+      }
+      : {
+        transition: 'all 0.3s ease', // Added smooth transition for style changes
+      };
 });
 
 const closeModal = () => {
