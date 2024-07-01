@@ -1014,6 +1014,35 @@ input:-webkit-autofill:active {
   bottom: 0;
 }
 
+@media (max-width: 600px) { 
+  .overflow-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 10px; /* Adjust padding */
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.fixed-bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px; /* Adjust as necessary */
+}
+
+/* Apply fixed position only on small screens */
+@media (max-width: 600px) {
+  .fixed-bottom-actions {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 10px; /* Adjust padding */
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Optional */
+  }
+}
+
 @keyframes flash {
   0% { opacity: 1; }
   50% { opacity: 0; }
