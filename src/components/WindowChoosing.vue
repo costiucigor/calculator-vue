@@ -464,7 +464,7 @@ watch(imageCount, () => {
   position: absolute;
   width: 348px;
   overflow-x: hidden;
-  height: 700px;
+  height: 640px;
   max-height: 120vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -1034,7 +1034,7 @@ input:-webkit-autofill:active {
 .fixed-bottom-actions {
   display: flex;
   justify-content: space-between;
-  margin: 10px; /* Adjust as necessary */
+  margin: 10px; 
 }
 
 /* Apply fixed position only on small screens */
@@ -1044,8 +1044,9 @@ input:-webkit-autofill:active {
     bottom: 0;
     width: 100%;
     background-color: white;
-    padding: 10px; /* Adjust padding */
+    padding: 10px; 
     box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Optional */
+    z-index: 999;
   }
 }
 
