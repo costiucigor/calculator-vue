@@ -483,6 +483,12 @@ watch(imageCount, () => {
   }
 }
 
+@media (max-width: 600px) {
+  .modal-content {
+    padding-top: -10px;
+  }
+}
+
 @media screen and (max-height: 400px), (max-width: 500px) {
   .modal-content {
     max-height: 100vh;
